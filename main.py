@@ -16,7 +16,7 @@ PRODUCTS_PER_PAGE = 5
 
 app = Sanic()
 @app.route('/product/get?<page>?<price_lowest>?<price_highest>?<rating_lowest>?<rating_highest>?<brands>?<text>', methods=['GET', 'OPTIONS'])
-@cross_origin(app, automatic_options=True, origins='http://localhost:3000')
+@cross_origin(app, automatic_options=True)
 async def get_products(request, page, price_lowest, price_highest, rating_lowest, rating_highest, brands, text):
     query_string = request.query_string.split('&')
     page = int(query_string[0].split('=', 1)[-1])
@@ -115,15 +115,25 @@ async def count_total_pages(data):
     return total_pages
         
 
-async def get_specific_product(id):
+@app.route('/get/product/byid?<id>', methods=['GET', 'OPTIONS'])
+@cross_origin(app, automatic_options=True)
+async def get_specific_product(request, id):
+    query_string = request.query_string.split('&')
+    print(query_string)
+    id = query_string[0].split('=', 1)[-1]
+    print(id)
     with open('db.json') as json_file:
         data = encoder.load(json_file)
         data = data['products']
         result = list(filter(lambda p: p['id'] == id, data))
+        print("RESULT", result)
+        return json({
+            "data": result
+        })
     
 
 @app.route('/getbrands/', methods=['GET', 'OPTIONS'])
-@cross_origin(app, automatic_options=True, origins='http://localhost:3000')
+@cross_origin(app, automatic_options=True)
 async def get_brandlist(request):
     with open('db.json') as json_file:
         data = encoder.load(json_file)
