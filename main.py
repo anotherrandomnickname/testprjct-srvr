@@ -138,7 +138,7 @@ async def get_brandlist(request):
 
 if __name__ == "__main__":
     app.run(
-    host='0.0.0.0',
-    port=os.environ.get('PORT') or 3110,
-    debug=True
-)
+        host='0.0.0.0',
+        port=int(os.environ.get('PORT', 8000)),
+        workers=int(os.environ.get('WEB_CONCURRENCY', 1)),
+        debug=bool(os.environ.get('DEBUG', '')))
