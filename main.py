@@ -1,7 +1,6 @@
 import json as encoder
 from difflib import get_close_matches
 import math
-from functools import reduce
 
 from sanic import Sanic
 from sanic.response import json
