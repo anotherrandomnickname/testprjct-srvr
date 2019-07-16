@@ -8,6 +8,8 @@ from sanic.response import json
 from sanic_cors import CORS, cross_origin
 from sanic import response
 
+import os
+
 
 MAX_RATING = 100
 MAX_PRICE = 1000
@@ -136,4 +138,8 @@ async def get_brandlist(request):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3110)
+    app.run(
+    host='0.0.0.0',
+    port=os.environ.get('PORT') or 3110,
+    debug=True
+)
