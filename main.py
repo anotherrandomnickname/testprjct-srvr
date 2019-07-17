@@ -27,7 +27,6 @@ async def get_products(request, page, price_lowest, price_highest, rating_lowest
     brands = query_string[5].split('=', 1)[-1]
     text = query_string[6].split('=', 1)[-1]
 
-    print(request.query_string)
     with open('db.json') as json_file:
         data = encoder.load(json_file)
         result = await filter_word(data['products'], text)
@@ -60,15 +59,11 @@ async def filter_rating(data, rating_lowest, rating_hightest):
     return result
 
 async def filter_brands(data, brands):
-    print('BRANDS', brands)
     if brands != '':
-        print('NOT EMPTY')
         brand_list = brands.split('-')
         result = []
         for brand in brand_list:
-            print("brand is", brand)
             result = result + list(filter(lambda p: p['brandName'] == brand, data))
-            print("result is", result)
         return result
     else:
         return data
@@ -119,14 +114,11 @@ async def count_total_pages(data):
 @cross_origin(app, automatic_options=True)
 async def get_specific_product(request, id):
     query_string = request.query_string.split('&')
-    print(query_string)
     id = query_string[0].split('=', 1)[-1]
-    print(id)
     with open('db.json') as json_file:
         data = encoder.load(json_file)
         data = data['products']
         result = list(filter(lambda p: p['id'] == id, data))
-        print("RESULT", result)
         return json({
             "data": result
         })
